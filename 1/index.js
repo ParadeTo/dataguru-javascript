@@ -56,9 +56,9 @@
 // console.log(m1({}))
 // console.log(m2({}))
 
-function f(y=x) {
+function f(z, y=x) {
   var x=2;
   console.log(y)
 }
 
-f()
+console.log(f.length)

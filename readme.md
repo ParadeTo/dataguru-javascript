@@ -130,6 +130,10 @@
   }
   add(1,2,3,4)
   ```
+* 拓展运算符
+  ```javascript
+  console.log(2, ...[1,2,3])
+  ```
 ## 对象的拓展
 ## Symbol
 http://es6.ruanyifeng.com/?search=Symbol&x=0&y=0#docs/symbol
