@@ -56,9 +56,35 @@
 // console.log(m1({}))
 // console.log(m2({}))
 
-function f(z, y=x) {
-  var x=2;
-  console.log(y)
+// function f(z, y=x) {
+//   var x=2;
+//   console.log(y)
+// }
+//
+// console.log(f.length)
+
+// var f = v => {return {h: 'test'}}
+//
+// console.log(f())
+
+function P(name) {
+    this.name = name;
 }
 
-console.log(f.length)
+P.prototype.age = 1;
+
+function S(name) {
+    P.call(this, name)
+}
+S.prototype = new P()
+
+
+var s1 = new S('ayou')
+var s2 = new S('xing')
+s2.age = 2
+console.log(s1.name, s1.age)
+console.log(s2.name, s2.age)
+Object.assign(s1, s2)
+console.log(s1.name, s1.age)
+
+console.log(Object.getOwnPropertyDescriptor(s1, 'name'))
