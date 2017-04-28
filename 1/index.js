@@ -64,7 +64,6 @@
 // console.log(f.length)
 
 
-
 function updateInventory(arr1, arr2) {
   // All inventory must be accounted for or you're fired!
   var arr = [];
@@ -102,3 +101,29 @@ var newInv = [
 
 console.log(updateInventory(curInv, newInv));
 console.log(updateInventory([[21, "Bowling Ball"], [2, "Dirty Sock"], [1, "Hair Pin"], [5, "Microphone"]], [[2, "Hair Pin"], [3, "Half-Eaten Apple"], [67, "Bowling Ball"], [7, "Toothpaste"]]).length)
+
+// var f = v => {return {h: 'test'}}
+//
+// console.log(f())
+
+function P(name) {
+    this.name = name;
+}
+
+P.prototype.age = 1;
+
+function S(name) {
+    P.call(this, name)
+}
+S.prototype = new P()
+
+
+var s1 = new S('ayou')
+var s2 = new S('xing')
+s2.age = 2
+console.log(s1.name, s1.age)
+console.log(s2.name, s2.age)
+Object.assign(s1, s2)
+console.log(s1.name, s1.age)
+
+console.log(Object.getOwnPropertyDescriptor(s1, 'name'))
