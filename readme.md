@@ -485,7 +485,7 @@ console.log(sg.next())
 { value: undefined, done: true }
 ```
 
-与Symbol.iterator的关系:
+### 与Symbol.iterator的关系:
 
 ```javascript
 function * g() {}
@@ -493,7 +493,7 @@ var gen = g()
 gen[Symbol.iterator]() === gen // true
 ```
 
-yield没有返回值，next()可以传参数作为上一个yield的返回值
+### yield没有返回值，next()可以传参数作为上一个yield的返回值
 
 ```javascript
 function * gen2() {
@@ -508,3 +508,137 @@ console.log(g2.next('world')) // 作为 yield 'world' 的返回值
 如果想第一次调用next方法就输入值，怎么处理
 
 http://es6.ruanyifeng.com/#docs/generator
+
+### 遍历
+for...of，拓展运算符，解构赋值，Array.from 可以自动遍历Generator函数
+
+### Symbol.iterator
+```javascript
+function * objectEntries() {
+  let propKeys = Object.keys(this)
+  for (let key of propKeys) {
+    yield [key, this[key]]
+  }
+}
+
+let jane = {first: 'jane', 'last': 'doe'}
+jane[Symbol.iterator] = objectEntries
+
+for (let [key, value] of jane) console.log(key, value)
+```
+
+### Generator.prototype.throw
+```javascript
+const g = function* () {
+  while (true) {
+    try {
+      yield
+    } catch (e) {
+      if (e != 'a') throw e
+      console.log('内部捕获', e)
+    }
+  }
+}
+
+i = g()
+i.next()
+i.throw('a')
+i.throw('b')
+```
+
+### yield*
+```javascript
+const inner = function* () {
+  yield 'a'
+  yield 'b'
+}
+
+const gen = function* () {
+  yield 1
+  yield 2
+  yield* inner()
+  yield 3
+}
+
+var g = gen()
+
+for (let k of g) console.log(k)
+```
+
+任何数据只要有iterator接口，就可以用yield*来遍历
+
+## class
+内部定义的方法是不可枚举的
+
+### name
+```javascript
+const MyClass = class me {
+  getClassName() {
+    return me.name
+  }
+}
+
+me.name // 报错
+```
+
+### 不存在变量提升
+
+### extends继承
+必须调用super方法生成this对象，才能谁用this关键字
+
+1.子类的__proto__属性表示构造函数的继承，总是指向夫类
+
+2.子类的prototype属性的__proto__属性表示方法的继承，总是指向夫类的prototype属性
+
+```javascript
+class A {}
+class B {}
+class B extends A {}
+B.__proto__ === A // true
+B.prototype.__proto__ === A.prototype // true
+```
+
+### Object.getPrototypeOf
+从子类上获取父类
+
+### generator 方法
+```javascript
+class Foo {
+  *[Symbol.iterator] () {}
+}
+```
+
+### 静态方法
+```javascript
+class StaticFoo {
+  static classMethod () {
+    return 'hi'
+  }
+}
+
+class Test extends StaticFoo {
+
+}
+
+console.log(StaticFoo.classMethod())
+console.log(Test.classMethod())
+const p = new Test()
+console.log(p.classMethod()) // 报错
+```
+
+### new.target
+在构造函数中返回new命令所作用的构造函数，如果构造函数不是通过new命令调用的，那么返回undefined
+
+作用域安全的构造函数
+
+```javascript
+function Student(name) {
+  if (!new.target) {
+    return new Student(name)
+  }
+  this.name = name
+}
+
+const a = Student('a')
+console.log(a.name)
+```

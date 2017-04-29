@@ -28,3 +28,23 @@ function * gen2() {
 const g2 = gen2()
 console.log(g2.next('d'))
 console.log(g2.next('world'))
+
+function * objectEntries() {
+  let propKeys = Object.keys(this)
+  for (let key of propKeys) {
+    yield [key, this[key]]
+  }
+}
+
+let jane = {first: 'jane', 'last': 'doe'}
+jane[Symbol.iterator] = objectEntries
+
+// for (let [key, value] of jane) console.log(key, value)
+function *trans() {
+  yield* jane
+}
+console.log(trans().next())
+// const a = (1, 2)
+//
+// console.log(a)
+
